@@ -5,7 +5,9 @@ const router = express.Router();
 const Users = require('../users/users-model');
 const restricted = require('../auth/restricted-middleware');
 
-
+router.get('/', (req, res) => {
+    res.status(200).json({ message: 'its working!' })
+})
 router.post('/register', (req, res) => {
     const { username, password } = req.body;
 
@@ -36,7 +38,16 @@ router.post('/login', (req, res) => {
         });
 })
 
-router.get('/users', restricted, (req, res) => {
+// router.get('/users', restricted, (req, res) => {
+//     Users.find()
+//         .then(users => {
+//             res.status(200).json(users)
+//         })
+//         .catch(err => {
+//             res.json(400).json(err)
+//         })
+// })
+router.get('/users', (req, res) => {
     Users.find()
         .then(users => {
             res.status(200).json(users)

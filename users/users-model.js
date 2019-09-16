@@ -8,16 +8,16 @@ module.exports = {
 }
 
 function find() {
-    return db('usercred')
+    return db('user_credentials')
         .select('id', 'username', 'password')
 }
 function findBy(filter) {
-    return db('usercred')
+    return db('user_credentials')
         .where(filter)
         .first()
 }
 function add(data) {
-    return db('usercred')
+    return db('user_credentials')
         .insert(user, 'id')
         .then(ids => {
             const [id] = ids;
@@ -26,7 +26,7 @@ function add(data) {
 }
 
 function findById(id) {
-    return db('usercred')
+    return db('user_credentials')
         .where({ id })
         .first()
 }
