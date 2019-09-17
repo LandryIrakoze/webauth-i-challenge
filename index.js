@@ -3,15 +3,39 @@ const helmet = require('helmet');
 const cors = require('cors');
 const morgan = require('morgan');
 const bcrypt = require('bcryptjs');
+const session = require('express-session');
+const KnexSessionStore = require('connect-session-knex')(session);
 
 const UsersRouter = require('./routes/users');
 
+const dbConnection = require('./database/dbConfig');
+
 const server = express();
+
+const sessionConfig = {
+    name: 'myCookie',
+    secret: process.env.SESSION_SECRET || 'keep it secret, keep it safe',
+    cookie: {
+        maxAge: 1000 * 60 * 60,
+        secure: false,
+        httpOnly: true
+    },
+    resave: false,
+    saveUninitialized: true,
+    store: new KnexSessionStore({
+        knex: dbConnection,
+        tablename: 'knexsessions',
+        sidfieldname: 'sessionid',
+        createtable: true,
+        clearInterval: 1000 * 60 * 30
+    })
+}
 
 server.use(helmet());
 server.use(cors());
 server.use(morgan());
 server.use(express.json());
+server.use(session(sessionConfig));
 
 server.use('/api/', UsersRouter)
 
