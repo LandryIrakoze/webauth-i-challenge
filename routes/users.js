@@ -28,6 +28,7 @@ router.post('/login', (req, res) => {
         .first()
         .then(user => {
             if (user && bcrypt.compareSync(password, user.password)) {
+                req.session.user = user.username;
                 res.status(200).json({ message: `Welcome ${user.username}!` })
             } else {
                 res.status(400).json({ message: 'Invalid credentials'})
@@ -38,17 +39,7 @@ router.post('/login', (req, res) => {
         });
 })
 
-// router.get('/users', restricted, (req, res) => {
-//     Users.find()
-//         .then(users => {
-//             res.status(200).json(users)
-//         })
-//         .catch(err => {
-//             res.json(400).json(err)
-//         })
-// })
-
-router.get('/users', (req, res) => {
+router.get('/users', restricted, (req, res) => {
     Users.find()
         .then(users => {
             res.status(200).json(users)
@@ -57,6 +48,16 @@ router.get('/users', (req, res) => {
             res.json(400).json(err)
         })
 })
+
+// router.get('/users', (req, res) => {
+//     Users.find()
+//         .then(users => {
+//             res.status(200).json(users)
+//         })
+//         .catch(err => {
+//             res.json(400).json(err)
+//         })
+// })
 
 router.get('/logout', (req, res) => {
     if (req.session) {
