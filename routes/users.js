@@ -38,7 +38,17 @@ router.post('/login', (req, res) => {
         });
 })
 
-router.get('/users', restricted, (req, res) => {
+// router.get('/users', restricted, (req, res) => {
+//     Users.find()
+//         .then(users => {
+//             res.status(200).json(users)
+//         })
+//         .catch(err => {
+//             res.json(400).json(err)
+//         })
+// })
+
+router.get('/users', (req, res) => {
     Users.find()
         .then(users => {
             res.status(200).json(users)
@@ -46,6 +56,20 @@ router.get('/users', restricted, (req, res) => {
         .catch(err => {
             res.json(400).json(err)
         })
+})
+
+router.get('/logout', (req, res) => {
+    if (req.session) {
+        req.session.destroy(error => {
+            if (error) {
+                res.status(500).json({ message: 'error logging out' })
+            } else {
+                res.status(200).json({ message: 'logged out' })
+            }
+        })
+    } else {
+        res.status(200).json({ message: 'already logged out' })
+    }
 })
 
 module.exports = router;
