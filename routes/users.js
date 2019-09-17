@@ -38,16 +38,7 @@ router.post('/login', (req, res) => {
         });
 })
 
-// router.get('/users', restricted, (req, res) => {
-//     Users.find()
-//         .then(users => {
-//             res.status(200).json(users)
-//         })
-//         .catch(err => {
-//             res.json(400).json(err)
-//         })
-// })
-router.get('/users', (req, res) => {
+router.get('/users', restricted, (req, res) => {
     Users.find()
         .then(users => {
             res.status(200).json(users)

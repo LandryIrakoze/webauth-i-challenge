@@ -18,7 +18,7 @@ function findBy(filter) {
 }
 function add(data) {
     return db('user_credentials')
-        .insert(user, 'id')
+        .insert(data, 'id')
         .then(ids => {
             const [id] = ids;
             return findById(id)
